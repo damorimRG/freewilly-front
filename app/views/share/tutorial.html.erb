@@ -1,0 +1,209 @@
+<br />
+<br />
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <h2>A simple guide to <%= project_name %></h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+
+            <header class="post-header">
+                <p class="post-meta"><time datetime="2018-11-22T00:00:00+00:00" itemprop="datePublished">Nov 22, 2018</time> • <a href="mailto:lhsm@cin.ufpe.br"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Luís Melo</span></span></a>
+                </p>
+            </header>
+
+            <div class="post-content" itemprop="articleBody">
+                <p>In this guide, we will look at how to use the <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow. We’ll start by creating a session and a node, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
+
+                <blockquote>
+                    <ul>
+                        <li><a href="#Task_0">Task 0: Prerequisites</a></li>
+                        <li><a href="#Task_1">Task 1: Modifying the Website</a></li>
+                        <li><a href="#Task_2">Task 2: Package and run a custom app using Docker</a></li>
+                    </ul>
+                </blockquote>
+
+                <h2 id="task-0-prerequisites">
+                    <a name="task0"></a>Task 0: Prerequisites</h2>
+
+                <p>You will need all of the following to complete this lab:</p>
+                <ul>
+                    <li>Knowledge of simple JavaScript (Node.JS).</li>
+                    <li>Knowledge of basic Docker commands.</li>
+                    <li>A modern browser.</li>
+                </ul>
+
+                <h3 id="clone-the-labs-github-repo">Cloning a session</h3>
+
+                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('express') %>">this</a> link, or click the <a href="<%= run_instance_path('express') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>.
+                 This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
+
+                 <h2 id="task-2-modify-the-website">
+                 <a name="Task_2"></a>Task 2: Modify the website</h2>
+
+             <p>When you’re actively working on an application you have to make sure you are in the correct directory. Make sure you are in the <code class="highlighter-rouge">/root</code> directory.</p>
+
+             <p>Once you are in the website directory, click the "Editor" button on the top side of the page. A new pop-up will show up with a file editor. This will allow any changes made to the files to be reflected to the server with a click of the "Save" button.</p>
+
+             <p>First, modify the <code class="highlighter-rouge">/root/index.js</code> file at line 6 where it contains <code class="highlighter-rouge">res.send("Hello world!");</code>:</p>
+
+             <pre><code class="language-.term1">var express = require('express');
+var app = express();
+             
+app.get('/', function(req, res){
+    res.send("Hello world!"); // Here
+});
+             
+app.listen(8080);
+</code></pre>
+
+
+                <h2 id="task-2-package-and-run-a-custom-app-using-docker">
+                    <a name="Task_2"></a>Task 2: Package and run a custom app using Docker</h2>
+
+                    <p>There are different ways to use containers. These include:</p>
+
+                    <ol>
+                        <li><strong>To run a single task:</strong> This could be a shell script or a custom app.</li>
+                        <li><strong>Interactively:</strong> This connects you to the container similar to the way you SSH into a remote server.</li>
+                        <li><strong>In the background:</strong> For long-running services like websites and databases.</li>
+                    </ol>
+    
+                    <p>In this section you’ll learn how to use <strong>run a single task</strong> using our platform and learn how to package your own apps as Docker images using a <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a>.</p>
+
+                <p>The Dockerfile syntax is straightforward. In this task, we’re going to create a simple NGINX website from a Dockerfile.</p>
+
+                <h3 id="build-a-simple-website-image">Build a simple website image</h3>
+
+                <p>Let’s have a look at the Dockerfile we’ll be using, which builds a simple website that allows you to open the website.</p>
+
+                <ol>
+                    <li>
+                        <p>Make sure you’re in the <code class="highlighter-rouge">/root</code> directory.</p>
+
+                        <pre><code class="language-.term1"> cd ~
+</code></pre>
+                    </li>
+                    <li>
+                        <p>Display the contents of the Dockerfile.</p>
+
+                        <pre><code class="language-.term1"> cat Dockerfile
+</code></pre>
+
+                        <div class="highlighter-rouge">
+                            <div class="highlight"><pre class="highlight"><code> FROM node:6.9.5
+RUN mkdir /app && cd /app
+WORKDIR /app
+RUN npm install --save express
+COPY . /app
+EXPOSE 8080
+CMD node index.js
+</code></pre></div>
+                        </div>
+
+                        <p>Let’s see what each of these lines in the Dockerfile do.</p>
+
+                        <ul>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#from">FROM</a> specifies the base image to use as the starting point for this new image you’re creating. For this example we’re starting from <code class="highlighter-rouge">node:6.9.5</code>.</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#copy">COPY</a> copies files from the Docker host into the image, at a known location. In this example, <code class="highlighter-rouge">COPY</code> is used to copy a directory into the image: <code class="highlighter-rouge">.</code>.</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#expose">EXPOSE</a> documents which ports the application uses.</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#cmd">CMD</a> specifies what command to run when a container is started from the image. Notice that we can specify the command, as well as run-time arguments.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>Use the <code class="highlighter-rouge">docker image build</code> command to create a new Docker image using the instructions in the Dockerfile.</p>
+
+                        <ul>
+                            <li><code class="highlighter-rouge">--tag</code> allows us to give the image a custom name. In this case it’s comprised the application name, and a version.</li>
+                            <li><code class="highlighter-rouge">.</code> tells Docker to use the current directory as the build context</li>
+                        </ul>
+
+                        <p>Be sure to include period (<code class="highlighter-rouge">.</code>) at the end of the command.</p>
+
+                        <pre><code class="language-.term1"> docker image build --tag expressapp:1.0 .
+</code></pre>
+
+                        <p>The output below shows the Docker daemon executing each line in the Dockerfile</p>
+
+                        <div class="highlighter-rouge">
+                            <div class="highlight"><pre class="highlight"><code> Sending build context to Docker daemon  1.924MB
+Step 1/6 : FROM node:6.9.5
+6.9.5: Pulling from library/node
+5040bd298390: Pull complete 
+fce5728aad85: Pull complete 
+76610ec20bf5: Pull complete 
+9c1bc3c30371: Pull complete 
+33d67d70af20: Pull complete 
+1ddfaaf1b6a6: Pull complete 
+e68bca313f9e: Pull complete 
+Digest: sha256:cf454b60ee452473f963f60ff18ba75b8e900174aae9bf0e8051e5a83db85b30
+Status: Downloaded newer image for node:6.9.5
+    ---> cde8ba396275
+Step 2/6 : RUN mkdir /app && cd /app
+    ---> Running in c3ef600eca3b
+Removing intermediate container c3ef600eca3b
+    ---> 4002bd7fd33b
+Step 3/6 : WORKDIR /app
+    ---> Running in 5333831248a0
+Removing intermediate container 5333831248a0
+    ---> 8e0b4c62cb38
+Step 4/6 : RUN npm install
+    ---> Running in 5fe4a1a79dba
+npm info it worked if it ends with ok
+npm info using npm@3.10.10
+npm info using node@v6.9.5
+npm info lifecycle undefined~preinstall: undefined
+npm info linkStuff !invalid#1
+npm info lifecycle undefined~install: undefined
+npm info lifecycle undefined~postinstall: undefined
+npm info lifecycle undefined~prepublish: undefined
+npm WARN enoent ENOENT: no such file or directory, open '/app/package.json'
+npm WARN app No description
+npm WARN app No repository field.
+npm WARN app No README data
+npm WARN app No license field.
+npm info ok 
+Removing intermediate container 5fe4a1a79dba
+    ---> 73831cc3062e
+Step 5/6 : COPY . /app
+    ---> b658dd7a7bdc
+Step 6/6 : CMD node index.js
+    ---> Running in 4a1922953856
+Removing intermediate container 4a1922953856
+    ---> e7c7c9e25584
+Successfully built e7c7c9e25584
+Successfully tagged expressapp:1.0
+</code></pre></div>
+                        </div>
+                    </li>
+                    <li>
+                        <p>Use the <code class="highlighter-rouge">docker run</code> command to start a new container from the image you created.</p>
+
+                        <p>As this container will be running an Express.JS web server, we’ll use the <code class="highlighter-rouge">--publish</code> flag to publish port 8080 inside the container onto port 8080 on the host. This will allow traffic coming in to the Docker host on port 8080 to be directed to port 8080 in the container. The format of the <code class="highlighter-rouge">--publish</code> flag is <code class="highlighter-rouge">host_port</code>:<code class="highlighter-rouge">container_port</code>.</p>
+
+                        <pre><code class="language-.term1"> docker run \
+--publish 8080:8080 \
+--name expressapp \
+expressapp:1.0
+</code></pre>
+
+                        <p>Any external traffic coming into the server on port 8080 will now be directed into the container on port 8080.</p>
+
+                        <p>In a later step you will see how to map traffic from two different ports - this is necessary when two containers use the same port to communicate since you can only expose the port once on the host.</p>
+                    </li>
+                    <li>
+                        <p>Once you’ve accessed your website, shut it down and remove it.</p>
+
+                        <pre><code class="language-.term1"> Ctrl+C
+</code></pre>
+                    </li>
+                </ol>
+
+            </div>
+        </article>
+    </div>
+</div>
