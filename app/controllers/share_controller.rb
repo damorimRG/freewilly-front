@@ -22,7 +22,7 @@ class ShareController < ApplicationController
     end
 
     def create
-        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
+        pwd = PwdInterface.new 'pwd:3000'
         pwdSession = pwd.create_session
         redirect_to "http://pg.docker.lhsm.com.br/p/#{pwdSession}"
     end
@@ -36,7 +36,7 @@ class ShareController < ApplicationController
         if not session
             return not_found
         end
-        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
+        pwd = PwdInterface.new 'pwd:3000'
         pwdSession = pwd.create_session
         
         session.instances.each do |instance|
@@ -54,7 +54,7 @@ class ShareController < ApplicationController
     end
 
     def share
-        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
+        pwd = PwdInterface.new 'pwd:3000'
         pwdSession = params[:session]
         pwdInstances = pwd.get_instances(pwdSession)
 
