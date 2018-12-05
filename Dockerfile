@@ -7,4 +7,5 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 COPY . .
 
+RUN rake db:migrate
 CMD rails s -b 0.0.0.0
