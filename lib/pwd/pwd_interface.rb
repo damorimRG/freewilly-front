@@ -12,6 +12,7 @@ class PwdInterface
   
     def create_session
       session = self.class.post('/')
+      puts session.parsed_response
       session.parsed_response["session_id"]
     end
   
