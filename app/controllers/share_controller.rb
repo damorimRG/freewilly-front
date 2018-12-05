@@ -22,9 +22,9 @@ class ShareController < ApplicationController
     end
 
     def create
-        pwd = PwdInterface.new 'localhost'
+        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
         pwdSession = pwd.create_session
-        redirect_to "http://localhost/p/#{pwdSession}"
+        redirect_to "http://pg.docker.lhsm.com.br/p/#{pwdSession}"
     end
 
     def shared
@@ -36,7 +36,7 @@ class ShareController < ApplicationController
         if not session
             return not_found
         end
-        pwd = PwdInterface.new 'localhost'
+        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
         pwdSession = pwd.create_session
         
         session.instances.each do |instance|
@@ -44,17 +44,17 @@ class ShareController < ApplicationController
 
             downloadLink = s3.bucket('docker-fiddle').object("shares/#{session.uuid}/#{instance.uuid}.tar.gz").presigned_url(:get, expires_in: 60 * 60)
             puts downloadLink
-            Net::SSH.start("direct.localhost", pwdInstance.proxy_host, port: 8022) do |ssh|
+            Net::SSH.start("direct.pg.docker.lhsm.com.br", pwdInstance.proxy_host, port: 8022) do |ssh|
                 ssh.exec!("cd / && curl \"#{downloadLink}\" -o root.tar.gz && tar xvf root.tar.gz -C /root && rm -rf root.tar.gz && mv /root/root/* /root && rm -rf /root/root")
                 ssh.loop
             end
         end
 
-        redirect_to "http://localhost/p/#{pwdSession}"
+        redirect_to "http://pg.docker.lhsm.com.br/p/#{pwdSession}"
     end
 
     def share
-        pwd = PwdInterface.new 'localhost'
+        pwd = PwdInterface.new 'pg.docker.lhsm.com.br'
         pwdSession = params[:session]
         pwdInstances = pwd.get_instances(pwdSession)
 
@@ -66,7 +66,7 @@ class ShareController < ApplicationController
         pwdInstances.each do |pwdInstance|
 
             instance = Instance.create(uuid: SecureRandom.uuid, session_id: session.id)
-            Net::SSH.start("direct.localhost", pwdInstance['proxy_host'], port: 8022) do |ssh|
+            Net::SSH.start("direct.pg.docker.lhsm.com.br", pwdInstance['proxy_host'], port: 8022) do |ssh|
                 
                 ssh.exec! 'cd / && tar cvfz /root.tar.gz root/ --exclude ".*"'
                 ssh.loop
