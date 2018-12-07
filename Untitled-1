@@ -1,0 +1,5 @@
+require 'net/ssh'
+
+Net::SSH.start("direct.pg.docker.lhsm.com.br", 'ip10-0-4-5-bg3t63lvvg809365pqm0', port: 8022) do |ssh|
+    puts ssh.exec!('uname -a')
+end

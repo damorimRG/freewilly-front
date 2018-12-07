@@ -12,23 +12,25 @@
         <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
 
             <header class="post-header">
-                <p class="post-meta"><time datetime="2018-11-22T00:00:00+00:00" itemprop="datePublished">Nov 22, 2018</time> • <a href="mailto:lhsm@cin.ufpe.br"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Luís Melo</span></span></a>
+                <p class="post-meta">
+                    <time datetime="2018-11-22T00:00:00+00:00" itemprop="datePublished">Nov 22, 2018</time> • <a href="mailto:lhsm@cin.ufpe.br"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Luís Melo</span></span></a>
                 </p>
             </header>
 
             <div class="post-content" itemprop="articleBody">
-                <p>In this guide, we will look at how to use the <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow. We’ll start by creating a session and a node, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
+                <p>In this guide, we will look at how to use the
+                    <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow. We’ll start by creating a session and a node, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
 
                 <blockquote>
                     <ul>
-                        <li><a href="#Task_0">Task 0: Prerequisites</a></li>
-                        <li><a href="#Task_1">Task 1: Modifying the Website</a></li>
-                        <li><a href="#Task_2">Task 2: Package and run a custom app using Docker</a></li>
+                        <li><a href="#Task_0">Task 1: Check Prerequisites</a></li>
+                        <li><a href="#Task_1">Task 2: Modifying the Website</a></li>
+                        <li><a href="#Task_2">Task 3: Package and run a custom app using Docker</a></li>
                     </ul>
                 </blockquote>
 
                 <h2 id="task-0-prerequisites">
-                    <a name="task0"></a>Task 0: Prerequisites</h2>
+                    <a name="task0"></a>Task 1: Check Prerequisites</h2>
 
                 <p>You will need all of the following to complete this lab:</p>
                 <ul>
@@ -39,41 +41,29 @@
 
                 <h3 id="clone-the-labs-github-repo">Cloning a session</h3>
 
-                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">this</a> link, or click the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>.
-                 This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
+                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">this</a> link, or click the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>. This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
 
-                 <h2 id="task-1-modify-the-website">
-                 <a name="Task_1"></a>Task 1: Modifying the website</h2>
+                <h2 id="task-1-modify-the-website">
+                 <a name="Task_1"></a>Task 2: Modifying the website</h2>
 
-             <p>When you’re actively working on an application you have to make sure you are in the correct directory. Make sure you are in the <code class="highlighter-rouge">/root</code> directory.</p>
+                <p>When you’re actively working on an application you have to make sure you are in the correct directory. Make sure you are in the <code class="highlighter-rouge">/root</code> directory.</p>
 
-             <p>Once you are in the website directory, click the "Editor" button on the top side of the page. A new pop-up will show up with a file editor. This will allow any changes made to the files to be reflected to the server with a click of the "Save" button.</p>
+                <p>Once you are in the website directory, click the "Editor" button on the top side of the page. A new pop-up will show up with a file editor. This will allow any changes made to the files to be reflected to the server with a click of the "Save" button.</p>
 
-             <p>First, modify the <code class="highlighter-rouge">/root/index.js</code> file at line 5 where it contains <code class="highlighter-rouge">res.send("Hello world!");</code>:</p>
+                <p>First, modify the <code class="highlighter-rouge">/root/index.js</code> file at line 5 where it contains <code class="highlighter-rouge">res.send("Hello world!");</code>:</p>
 
-             <pre><code class="language-.term1">var express = require('express');
+                <pre><code class="language-.term1">var express = require('express');
 var app = express();
-             
+
 app.get('/', function(req, res){
     res.send("Hello world!"); // Here
 });
-             
+
 app.listen(8080);
 </code></pre>
 
-
                 <h2 id="task-2-package-and-run-a-custom-app-using-docker">
-                    <a name="Task_2"></a>Task 2: Package and run a custom app using Docker</h2>
-
-                    <p>There are different ways to use containers. These include:</p>
-
-                    <ol>
-                        <li><strong>To run a single task:</strong> This could be a shell script or a custom app.</li>
-                        <li><strong>Interactively:</strong> This connects you to the container similar to the way you SSH into a remote server.</li>
-                        <li><strong>In the background:</strong> For long-running services like websites and databases.</li>
-                    </ol>
-    
-                    <p>In this section you’ll learn how to use <strong>run a single task</strong> using our platform and learn how to package your own apps as Docker images using a <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a>.</p>
+                    <a name="Task_2"></a>Task 3: Package and run a custom app using Docker</h2>
 
                 <p>The Dockerfile syntax is straightforward. In this task, we’re going to create a simple Express website from a Dockerfile.</p>
 
