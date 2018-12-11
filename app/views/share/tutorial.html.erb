@@ -1,15 +1,12 @@
-<br />
-<br />
-<br />
-<br />
 <div class="row">
     <div class="col-lg-12">
         <h2>A simple guide to <%= project_name %></h2>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-12">
-        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <article class="post">
 
             <header class="post-header">
                 <p class="post-meta">
@@ -19,32 +16,37 @@
 
             <div class="post-content" itemprop="articleBody">
                 <p>In this guide, we will look at how to use the
-                    <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow. We’ll start by creating a session and a node, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
+                    <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow.</p>
+                
+                <p>Before we continue this tutorial, we need to learn the following nomenclatures:</p>
+                <ul>
+                    <li><b>Container</b>: Is a unit of software that will pack up your software and dependencies.</li>
+                    <li><b>Virtual Machine</b>: A machine that will run in our servers for a short period of time (2h) and will run your containers.</li>
+                    <li><b>Session</b>: A period of time that your virtual machines will be available to you.</li>
+                </ul>
+                    
+                <p>We’ll start by creating a session and a virtual machine, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
 
-                <blockquote>
-                    <ul>
-                        <li><a href="#Task_0">Task 1: Check Prerequisites</a></li>
-                        <li><a href="#Task_1">Task 2: Modifying the Website</a></li>
-                        <li><a href="#Task_2">Task 3: Package and run a custom app using Docker</a></li>
-                    </ul>
-                </blockquote>
 
                 <h2 id="task-0-prerequisites">
                     <a name="task0"></a>Task 1: Check Prerequisites</h2>
 
                 <p>You will need all of the following to complete this lab:</p>
                 <ul>
-                    <li>Knowledge of simple JavaScript (Node.JS). (Small guide <a href="https://gist.github.com/LeCoupa/985b82968d8285987dc3" target="_blank">here</a>)</li>
-                    <li>Knowledge of basic Docker commands. (Small guide <a href="https://github.com/wsargent/docker-cheat-sheet#containers" target="_blank">here</a>)</li>
+                    <li>Knowledge of simple JavaScript (Node.JS).</li>
+                    <li>Knowledge of basic Docker commands.</li>
                     <li>A modern browser.</li>
                 </ul>
 
-                <h3 id="clone-the-labs-github-repo">Cloning a session</h3>
+                <h2 id="task-1-clone">
+                    <a name="task1"></a>Task 2: Cloning a session</h2>
 
-                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">this</a> link, or click the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>. This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
+                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">this</a> link, or click the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>. </p>
+                
+                <p> This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
 
-                <h2 id="task-1-modify-the-website">
-                 <a name="Task_1"></a>Task 2: Modifying the website</h2>
+                <h2 id="task-2-modify-the-website">
+                 <a name="Task_2"></a>Task 3: Modifying the website</h2>
 
                 <p>When you’re actively working on an application you have to make sure you are in the correct directory. Make sure you are in the <code class="highlighter-rouge">/root</code> directory.</p>
 
@@ -62,8 +64,8 @@ app.get('/', function(req, res){
 app.listen(8080);
 </code></pre>
 
-                <h2 id="task-2-package-and-run-a-custom-app-using-docker">
-                    <a name="Task_2"></a>Task 3: Package and run a custom app using Docker</h2>
+                <h2 id="task-3-package-and-run-a-custom-app-using-docker">
+                    <a name="Task_3"></a>Task 4: Package and run a custom app using Docker</h2>
 
                 <p>The Dockerfile syntax is straightforward. In this task, we’re going to create a simple Express website from a Dockerfile.</p>
 
@@ -175,21 +177,16 @@ Successfully tagged expressapp:1.0
 
                         <p>As this container will be running an Express.JS web server, we’ll use the <code class="highlighter-rouge">--publish</code> flag to publish port 8080 inside the container onto port 8080 on the host. This will allow traffic coming in to the Docker host on port 8080 to be directed to port 8080 in the container. The format of the <code class="highlighter-rouge">--publish</code> flag is <code class="highlighter-rouge">host_port</code>:<code class="highlighter-rouge">container_port</code>.</p>
 
-                        <pre><code class="language-.term1"> docker run \
---publish 8080:8080 \
---name expressapp \
-expressapp:1.0
-</code></pre>
+                        <pre><code class="language-.term1"> docker run --publish 8080:8080 --name expressapp expressapp:1.0</code></pre>
 
                         <p>Any external traffic coming into the server on port 8080 will now be directed into the container on port 8080.</p>
 
-                        <p>In a later step you will see how to map traffic from two different ports - this is necessary when two containers use the same port to communicate since you can only expose the port once on the host.</p>
+                        <p>Observe that in the top of the window, a <b>8080</b> number will show up. Click on that number, and your browser should open a new tab with your app running and showing the message you typed before.</p>
                     </li>
                     <li>
                         <p>Once you’ve accessed your website, shut it down and remove it.</p>
 
-                        <pre><code class="language-.term1"> Ctrl+C
-</code></pre>
+                        <pre><code class="language-.term1"> Ctrl+C</code></pre>
                     </li>
                 </ol>
 
