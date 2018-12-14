@@ -1,5 +1,5 @@
 module ApplicationHelper
     def project_name
-        "VNrwl"
+        "Frisk"
     end
 end
