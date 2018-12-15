@@ -1,0 +1,46 @@
+Step 1/6 : FROM node:6.9.5
+6.9.5: Pulling from library/node
+5040bd298390: Pull complete 
+fce5728aad85: Pull complete 
+76610ec20bf5: Pull complete 
+9c1bc3c30371: Pull complete 
+33d67d70af20: Pull complete 
+1ddfaaf1b6a6: Pull complete 
+e68bca313f9e: Pull complete 
+Digest: sha256:cf454b60ee452473f963f60ff18ba75b8e900174aae9bf0e8051e5a83db85b30
+Status: Downloaded newer image for node:6.9.5
+    ---> cde8ba396275
+Step 2/6 : RUN mkdir /app && cd /app
+    ---> Running in c3ef600eca3b
+Removing intermediate container c3ef600eca3b
+    ---> 4002bd7fd33b
+Step 3/6 : WORKDIR /app
+    ---> Running in 5333831248a0
+Removing intermediate container 5333831248a0
+    ---> 8e0b4c62cb38
+Step 4/6 : RUN npm install
+    ---> Running in 5fe4a1a79dba
+npm info it worked if it ends with ok
+npm info using npm@3.10.10
+npm info using node@v6.9.5
+npm info lifecycle undefined~preinstall: undefined
+npm info linkStuff !invalid#1
+npm info lifecycle undefined~install: undefined
+npm info lifecycle undefined~postinstall: undefined
+npm info lifecycle undefined~prepublish: undefined
+npm WARN enoent ENOENT: no such file or directory, open '/app/package.json'
+npm WARN app No description
+npm WARN app No repository field.
+npm WARN app No README data
+npm WARN app No license field.
+npm info ok 
+Removing intermediate container 5fe4a1a79dba
+    ---> 73831cc3062e
+Step 5/6 : COPY . /app
+    ---> b658dd7a7bdc
+Step 6/6 : CMD node index.js
+    ---> Running in 4a1922953856
+Removing intermediate container 4a1922953856
+    ---> e7c7c9e25584
+Successfully built e7c7c9e25584
+Successfully tagged expressapp:1.0

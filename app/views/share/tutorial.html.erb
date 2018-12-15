@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h2>A simple guide to <%= project_name %></h2>
+        <h2>Using <%= project_name %> to create a sample based on a server-side web framework</h2>
     </div>
 </div>
 
@@ -10,84 +10,140 @@
 
             <header class="post-header">
                 <p class="post-meta">
-                    <time datetime="2018-11-22T00:00:00+00:00" itemprop="datePublished">Nov 22, 2018</time> • <a href="mailto:lhsm@cin.ufpe.br"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Luís Melo</span></span></a>
+                    <time datetime="2018-11-22T00:00:00+00:00"
+                          itemprop="datePublished">Dec. 15, 2018</time>
+
+<!--                    <a href="mailto:lhsm@cin.ufpe.br"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Luís Melo</span></span></a>-->
                 </p>
             </header>
 
             <div class="post-content" itemprop="articleBody">
-                <p>In this guide, we will look at how to use the
-                    <%= project_name %> with some basic Docker commands and a simple build-ship-run workflow.</p>
+                <p>This tutorial shows how to use <%= project_name %>
+                    to create and deploy an Express.js minimalistic
+                    app. A very similar method can be used to
+                    prototype apps for other frameworks.</p>
                 
-                <p>Before we continue this tutorial, we need to learn the following nomenclatures:</p>
+                <p>Background. It is important that the reader
+                understands the following concepts before
+                continuing.</p>
                 <ul>
-                    <li><b>Container</b>: Is a unit of software that will pack up your software and dependencies.</li>
-                    <li><b>Virtual Machine</b>: A machine that will run in our servers for a short period of time (2h) and will run your containers.</li>
-                    <li><b>Session</b>: A period of time that your virtual machines will be available to you.</li>
+                   <li><b>(<%= project_name %>) Session</b>: The 2h
+                      period a developer can interact with
+                      <%= project_name %>). Sessions are anonymous,
+                      which means you don't have an account to save
+                      your work, but note that you can continue and
+                      share your work by pressing the share
+                      icon<img src=""/>. When accessing that link,
+                      <%= project_name %> creates a new session based
+                      on the contents stored in the original
+                      session.</li>
+                    <li><b>(<%= project_name %>) Virtual Machine
+                    (VM)</b>: A machine that will be hosted in our
+                    servers. You can create as many VMs as necessary
+                    for the period of a session. This should be
+                    important when working with microsservices. </li>
+                    <li><b>(Docker) Image</b>: A file encapsulating
+                    the OS that will be used to run your example. This
+                    file is not visible to you (it is stored in the
+                    Docker registry). Docker uses the file
+                    '<code>Dockerfile</code>'--this one visible to the
+                    user--to create an image. One can find the images
+                    available in a virtual machine using the command
+                    "<code>$> docker images</code>".</li>
+                    <li><b>(Docker) Container</b>: Conceptually, a
+                    container is an image in execution; it is called
+                    that way because it isolates a running environment
+                    from other containers. One can find all containers
+                    available in a virtual machine using the command
+                    "<code>$> docker ps -a</code>".</li>
+                   <li><b>(<%= project_name %>) Card</b>: A card is a
+                   <%= project_name %> abstraction to bootstrap a
+                   <%= project_name %> session. A developer can use a
+                   card to start a session with coding artifacts as to
+                   speedup prototyping. These artifacts include
+                   a <code>Dockerfile</code> and boilerplate code
+                   associated with the purpose of the card.</li>
                 </ul>
-                    
-                <p>We’ll start by creating a session and a virtual machine, then we’ll use a Dockerfile to build a custom Express.JS app. Finally, we’ll look at how to run the container and obtain access to it.</p>
-
+                   
 
                 <h2 id="task-0-prerequisites">
-                    <a name="task0"></a>Task 1: Check Prerequisites</h2>
+                    <a name="task0"></a>Task 1: Check prerequisites</h2>
 
-                <p>You will need all of the following to complete this lab:</p>
-                <ul>
-                    <li>Knowledge of simple JavaScript (Node.JS).</li>
-                    <li>Knowledge of basic Docker commands.</li>
-                    <li>A modern browser.</li>
-                </ul>
+                <p>You will need a modern browser to complete this
+                tutorial. We will explain the pieces of Express.js
+                code covered and the Docker commands discussed along
+                the way, so prior knowledge on these is not
+                needed.</p>
 
                 <h2 id="task-1-clone">
-                    <a name="task1"></a>Task 2: Cloning a session</h2>
+                    <a name="task1"></a>Task 2: Create a session</h2>
 
-                <p> We'll start by cloning a saved session, use <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">this</a> link, or click the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1') %>">"Express.JS"</a> card on the <a href="<%= root_path %>">home page</a>. </p>
+                <p> Select
+                the <a href="<%= run_instance_path('e233f248-cea4-49b3-968e-89a01b4247a1')
+                %>">Express.js card</a> from the home page. </p>
                 
-                <p> This will make a copy of the Express.JS container source-code in the directory <code class="highlighter-rouge">/root</code>.</p>
+                <p> This selection has the following effects:</p>
+                <ul>
+                  <li>it creates a <%= project_name %> session with one virtual machine in it</li>
+                  <li>it adds a <code>Dockerfile</code> for Express.js
+                  (it does <b>not</b> create image or container)</li>
+                  <li>it adds boilerplate code--index.js--for a web service</li>
+                </ul>
 
                 <h2 id="task-2-modify-the-website">
-                 <a name="Task_2"></a>Task 3: Modifying the website</h2>
+                 <a name="Task_2"></a>Task 3: Modify the website</h2>
 
-                <p>When you’re actively working on an application you have to make sure you are in the correct directory. Make sure you are in the <code class="highlighter-rouge">/root</code> directory.</p>
+                <p>Before continuing, make sure you are in
+                the <code class="highlighter-rouge">/root</code>
+                directory by
+                typing <code class="highlighter-rouge">pwd</code> from
+                the shell. This is the base directory for making
+                changes in your environment. After that, click the
+                "Editor" button. You can make changes to the files
+                using the file editor that will show
+                up. Alternatively, you can
+                use <code class="highlighter-rouge">vim</code> from
+                the shell, if you prefer.</p> 
 
-                <p>Once you are in the website directory, click the "Editor" button on the top side of the page. A new pop-up will show up with a file editor. This will allow any changes made to the files to be reflected to the server with a click of the "Save" button.</p>
+                <p> After those checks, modify the
+                file <code class="highlighter-rouge">/root/index.js</code>
+                (shown below) to print a different ouput. This file
+                contains Express.js code (a dialect of Node.js) to
+                respond to an HTTP request to the base URL of your app
+                (see string <code class="highlighter-rouge">'/'</code>
+                at line 4). Modify the
+                string <code class="highlighter-rouge">"Hello
+                world!"</code> however you want. Note that the string
+                is passed to the
+                function <code class="highlighter-rouge">send</code>
+                from
+                object <code class="highlighter-rouge">res</code>,
+                which denotes the response to an HTTP request.</p>
 
-                <p>First, modify the <code class="highlighter-rouge">/root/index.js</code> file at line 5 where it contains <code class="highlighter-rouge">res.send("Hello world!");</code>:</p>
-
-                <pre><code class="language-.term1">var express = require('express');
-var app = express();
-
-app.get('/', function(req, res){
-    res.send("Hello world!"); // Here
-});
-
-app.listen(8080);
-</code></pre>
+                <pre><code class="language-.term1">1: var express = require('express');
+2: var app = express();
+3: 
+4: app.get('/', function(req, res){
+5:     res.send("Hello world!"); // <-- here
+6: });
+7: 
+8: app.listen(8080);</code></pre>
 
                 <h2 id="task-3-package-and-run-a-custom-app-using-docker">
-                    <a name="Task_3"></a>Task 4: Package and run a custom app using Docker</h2>
+                    <a name="Task_3"></a>Task 4: Create the Docker image</h2>
 
-                <p>The Dockerfile syntax is straightforward. In this task, we’re going to create a simple Express website from a Dockerfile.</p>
-
-                <h3 id="build-a-simple-website-image">Build a simple website image</h3>
-
-                <p>Let’s have a look at the Dockerfile we’ll be using, which builds a simple website that allows you to open the website.</p>
+                <p>If you don't remember the definition a Docker
+                image, please check the definitions at the beginning
+                of this tutorial.</p>
 
                 <ol>
                     <li>
-                        <p>Make sure you’re in the <code class="highlighter-rouge">/root</code> directory.</p>
-
-                        <pre><code class="language-.term1"> cd ~
-</code></pre>
-                    </li>
-                    <li>
                         <p>Display the contents of the Dockerfile.</p>
 
-                        <pre><code class="language-.term1"> cat Dockerfile
-</code></pre>
+                        <pre><code class="language-.term1">$> cat Dockerfile</code></pre>
 
                         <div class="highlighter-rouge">
-                            <div class="highlight"><pre class="highlight"><code> FROM node:6.9.5
+                            <div class="highlight"><pre class="highlight"><code>FROM node:6.9.5
 RUN mkdir /app && cd /app
 WORKDIR /app
 RUN npm install --save express
@@ -97,98 +153,166 @@ CMD node index.js
 </code></pre></div>
                         </div>
 
-                        <p>Let’s see what each of these lines in the Dockerfile do.</p>
+                        <p>Let's see what each of these commands do.</p>
 
                         <ul>
-                            <li><a href="https://docs.docker.com/engine/reference/builder/#from">FROM</a> specifies the base image to use as the starting point for this new image you’re creating. For this example we’re starting from <code class="highlighter-rouge">node:6.9.5</code>.</li>
-                            <li><a href="https://docs.docker.com/engine/reference/builder/#copy">COPY</a> copies files from the Docker host into the image, at a known location. In this example, <code class="highlighter-rouge">COPY</code> is used to copy a directory into the image: <code class="highlighter-rouge">.</code>.</li>
-                            <li><a href="https://docs.docker.com/engine/reference/builder/#expose">EXPOSE</a> documents which ports the application uses.</li>
-                            <li><a href="https://docs.docker.com/engine/reference/builder/#cmd">CMD</a> specifies what command to run when a container is started from the image. Notice that we can specify the command, as well as run-time arguments.</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#from">FROM</a>
+                            specifies the base image of the new image
+                            you're creating (yes, images are
+                            layered). For this example, the base image
+                            is <code class="highlighter-rouge">node:6.9.5</code>,
+                            which builds on some Linux distribution.
+                            </li>
+<li><a href="https://docs.docker.com/engine/reference/builder/#run">RUN</a>
+  executes
+  the corresponding command in a new layer on top of the current
+  image. The resulting image will be used in the following commands
+  from the Dockerfile.</li>
+</li>
+<li><a href="https://docs.docker.com/engine/reference/builder/#workdir">WORKDIR</a>
+  sets the working directory that is used by other Docker commands.
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#copy">COPY</a>
+                            copies files from the host (in this case a
+                            <%= project_name %> VM) into the image. In
+                            this example,
+                            the <code class="highlighter-rouge">COPY</code>
+                            command is used to copy the contents of
+                            the
+                            <code>/root</code> directory (in the
+                            host) into the
+                            <code class="highlighter-rouge">app</code>
+                            directory (in the image).</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#expose">EXPOSE</a>
+                            sets which port(s) the application uses.</li>
+                            <li><a href="https://docs.docker.com/engine/reference/builder/#cmd">CMD</a>
+                            specifies what command to run when a
+                            container is started from the
+                            image. </li>
                         </ul>
                     </li>
+
                     <li>
-                        <p>Use the <code class="highlighter-rouge">docker image build</code> command to create a new Docker image using the instructions in the Dockerfile.</p>
+                        <p>Use the following command to create the
+                        image.
+
+                          <pre><code class="language-.term1">$> docker image build --tag expressapp:1.0 . </code></pre>
+
 
                         <ul>
-                            <li><code class="highlighter-rouge">--tag</code> allows us to give the image a custom name. In this case it’s comprised the application name, and a version.</li>
-                            <li><code class="highlighter-rouge">.</code> tells Docker to use the current directory as the build context</li>
+                            <li>The <code class="highlighter-rouge">--tag</code>
+                            option specifies a custom name for later reference.</li>
+                            <li>The <code class="highlighter-rouge">.</code>
+                            at the end of the command tells Docker to
+                            use the current directory to look for the
+                            file <code>Dockerfile</code></li>
                         </ul>
 
-                        <p>Be sure to include period (<code class="highlighter-rouge">.</code>) at the end of the command.</p>
-
-                        <pre><code class="language-.term1"> docker image build --tag expressapp:1.0 .
-</code></pre>
-
-                        <p>The output below shows the Docker daemon executing each line in the Dockerfile</p>
-
-                        <div class="highlighter-rouge">
-                            <div class="highlight"><pre class="highlight"><code> Sending build context to Docker daemon  1.924MB
-Step 1/6 : FROM node:6.9.5
-6.9.5: Pulling from library/node
-5040bd298390: Pull complete 
-fce5728aad85: Pull complete 
-76610ec20bf5: Pull complete 
-9c1bc3c30371: Pull complete 
-33d67d70af20: Pull complete 
-1ddfaaf1b6a6: Pull complete 
-e68bca313f9e: Pull complete 
-Digest: sha256:cf454b60ee452473f963f60ff18ba75b8e900174aae9bf0e8051e5a83db85b30
-Status: Downloaded newer image for node:6.9.5
-    ---> cde8ba396275
-Step 2/6 : RUN mkdir /app && cd /app
-    ---> Running in c3ef600eca3b
-Removing intermediate container c3ef600eca3b
-    ---> 4002bd7fd33b
-Step 3/6 : WORKDIR /app
-    ---> Running in 5333831248a0
-Removing intermediate container 5333831248a0
-    ---> 8e0b4c62cb38
-Step 4/6 : RUN npm install
-    ---> Running in 5fe4a1a79dba
-npm info it worked if it ends with ok
-npm info using npm@3.10.10
-npm info using node@v6.9.5
-npm info lifecycle undefined~preinstall: undefined
-npm info linkStuff !invalid#1
-npm info lifecycle undefined~install: undefined
-npm info lifecycle undefined~postinstall: undefined
-npm info lifecycle undefined~prepublish: undefined
-npm WARN enoent ENOENT: no such file or directory, open '/app/package.json'
-npm WARN app No description
-npm WARN app No repository field.
-npm WARN app No README data
-npm WARN app No license field.
-npm info ok 
-Removing intermediate container 5fe4a1a79dba
-    ---> 73831cc3062e
-Step 5/6 : COPY . /app
-    ---> b658dd7a7bdc
-Step 6/6 : CMD node index.js
-    ---> Running in 4a1922953856
-Removing intermediate container 4a1922953856
-    ---> e7c7c9e25584
-Successfully built e7c7c9e25584
-Successfully tagged expressapp:1.0
-</code></pre></div>
-                        </div>
+                        <p>Execution of this command generates a good
+                        amount of output on screen (check if your
+                        output
+                        matches <a href="express-tutorial-output.txt">ours<a>). To
+                        sum, this command downloads all dependent
+                        images, creates the
+                        image <code>expressapp:1.0</code> based on
+                        those pieces, and stores it in the Docker
+                        registry. It does <b>not</b> create
+                        containers. Check if the
+                        image <code>expressapp:1.0</code> is available
+                        in the registry with the command "<code>$>
+                        docker images</code>".</p>
+                 
                     </li>
-                    <li>
-                        <p>Use the <code class="highlighter-rouge">docker run</code> command to start a new container from the image you created.</p>
 
-                        <p>As this container will be running an Express.JS web server, we’ll use the <code class="highlighter-rouge">--publish</code> flag to publish port 8080 inside the container onto port 8080 on the host. This will allow traffic coming in to the Docker host on port 8080 to be directed to port 8080 in the container. The format of the <code class="highlighter-rouge">--publish</code> flag is <code class="highlighter-rouge">host_port</code>:<code class="highlighter-rouge">container_port</code>.</p>
+</ol>
 
-                        <pre><code class="language-.term1"> docker run --publish 8080:8080 --name expressapp expressapp:1.0</code></pre>
+                <h2 id="task-5">
+                    <a name="Task_5"></a>Task 5: Spawn the container</h2>
 
-                        <p>Any external traffic coming into the server on port 8080 will now be directed into the container on port 8080.</p>
+<ol>
 
-                        <p>Observe that in the top of the window, a <b>8080</b> number will show up. Click on that number, and your browser should open a new tab with your app running and showing the message you typed before.</p>
+
+  <li>
+    <p>Use the following command to start a new
+      container from the image you created. </p>
+    
+    <pre><code class="language-.term1"> docker run --publish 8080:8080 --name expressapp expressapp:1.0</code></pre>
+    
+    <p>Note the <code>CMD</code> command from the
+      Dockerfile. It is responsible for running the
+      Express.js webserver on the container. As this
+      container will be running an Express.JS web
+      server, we need to connect the ports on the VM
+      and the container. The
+      option <code class="highlighter-rouge">--publish
+        host_port:container_port</code> does
+      that. It enables traffic to the host (VM) to
+      be forwarded to the container. </p>
+    
+  </li>
+
+
+                    <li> At this point, your container should be up
+                        and running. You can check that two ways. 
+                      <ul>
+                        <li>
+                          Copy the ssh command on the top of the page
+                          and paste it in on a terminal (any machine)
+                          and then type <code>top</code>. You should
+                          be able to see a process corresponding to
+                          the the docker
+                          container <code>expressapp</code>.
+                        </li>
+
+                        <li>
+                          Click on the link <b>8080</b> that should
+                            have appeared on the top of your session
+                            once the container started to run. Your
+                            browser should open a new tab associated
+                            with the URL for your web service and it
+                            should respond with the message you
+                            defined in the file <code>index.js</code>.
+                        </li>
+                      </ul>
                     </li>
-                    <li>
-                        <p>Once you’ve accessed your website, shut it down and remove it.</p>
 
-                        <pre><code class="language-.term1"> Ctrl+C</code></pre>
-                    </li>
                 </ol>
+
+<h2 id="task-6">
+  <a name="Task_6"></a>Task 6: Share (a copy of) your session</h2>
+
+<p>There are two different ways to share work in <%= project_name %>.
+The first alternative provides access to the same session via SSH; the
+second alternative creates a copy of the session. The first
+alternative is useful, for example, to ask for help of a colleague to
+solve a problem in your setup whereas the second alternative is useful
+to share your work with strangers. Let us focus on the second
+alternative.</p>
+
+<ol>
+  <li> Identify the share-icon button that appears at the top of your
+    screen.</li>
+  <li>Click on that button, <%= project_name %> will show an
+    URL associated with your session.</li>
+  <li>Copy-and-paste that URL on the browser (it can be a different
+  browser running on a different machine). A click on that link will
+  result in the creation of a new session based on the contents of the
+  original session. The sessions are different! A change in one
+  session is <b>not</b> visible in the other session. If you want to
+  share a running session (without copying it), use the SSH button.
+  </li>
+  <li>Make a different change on the string message in
+  the <code>index.js</code> file and repeat the commands in this
+  tutorial to confirm that both services are running and they respond
+  with different strings.</li>  
+</ol>
+
+<h2 id="task-7">
+  <a name="Task_7"></a>Task 7: Close session</h2>
+
+Remove the VM from your session and then close the session. The
+maximum time of a session is 2h, but it is good practice to save time
+and space. You can continue your work anytime if you keep the URL for
+your session.
 
             </div>
         </article>
