@@ -19,9 +19,10 @@
 
             <div class="post-content" itemprop="articleBody">
                 <p>This tutorial shows how to use <%= project_name %>
-                    to create and deploy an Express.js minimalistic
-                    app. A very similar method can be used to
-                    prototype apps for other frameworks.</p>
+                    to create and deploy a minimalistic Express.js app
+                    and share your work with someone. A very similar
+                    method can be used to prototype apps for other
+                    frameworks.</p>
                 
                 <p>Background. It is important that the reader
                 understands the following concepts before
@@ -226,7 +227,7 @@ CMD node index.js
 </ol>
 
                 <h2 id="task-5">
-                    <a name="Task_5"></a>Task 5: Spawn the container</h2>
+                    <a name="Task_5"></a>Task 5: Spawn the Docker container</h2>
 
 <ol>
 
@@ -235,18 +236,16 @@ CMD node index.js
     <p>Use the following command to start a new
       container from the image you created. </p>
     
-    <pre><code class="language-.term1"> docker run --publish 8080:8080 --name expressapp expressapp:1.0</code></pre>
+    <pre><code class="language-.term1">$> docker run --publish 8080:8080 --name expressapp expressapp:1.0</code></pre>
     
-    <p>Note the <code>CMD</code> command from the
-      Dockerfile. It is responsible for running the
-      Express.js webserver on the container. As this
-      container will be running an Express.JS web
-      server, we need to connect the ports on the VM
-      and the container. The
-      option <code class="highlighter-rouge">--publish
-        host_port:container_port</code> does
-      that. It enables traffic to the host (VM) to
-      be forwarded to the container. </p>
+    <p>Recall that the <code>CMD</code> command (from the Dockerfile)
+      is responsible for running the Express.js webserver on the
+      container. As this container will be running an Express.JS web
+      server, we need to connect the ports on the VM and the
+      container. The option <code class="highlighter-rouge">--publish
+      host_port:container_port</code> does that. It enables traffic to
+      the host (VM) to be forwarded to the container, which is running
+      your service. </p>
     
   </li>
 
@@ -258,19 +257,19 @@ CMD node index.js
                           Copy the ssh command on the top of the page
                           and paste it in on a terminal (any machine)
                           and then type <code>top</code>. You should
-                          be able to see a process corresponding to
-                          the the docker
-                          container <code>expressapp</code>.
+                          be able to see referring to the
+                          name <code>expressapp</code>. This is the 
+                          container process.
                         </li>
 
                         <li>
                           Click on the link <b>8080</b> that should
                             have appeared on the top of your session
-                            once the container started to run. Your
-                            browser should open a new tab associated
-                            with the URL for your web service and it
-                            should respond with the message you
-                            defined in the file <code>index.js</code>.
+                            screeen once the container started to
+                            run. Your browser should open a new tab
+                            for that URL and you should see the
+                            message you defined in the
+                            file <code>index.js</code>. 
                         </li>
                       </ul>
                     </li>
@@ -307,13 +306,12 @@ alternative.</p>
 </ol>
 
 <h2 id="task-7">
-  <a name="Task_7"></a>Task 7: Close session</h2>
+  <a name="Task_7"></a>Task 7: Close your session(s)</h2>
 
 Remove the VM from your session and then close the session. The
 maximum time of a session is 2h, but it is good practice to save time
 and space. You can continue your work anytime if you keep the URL for
 your session.
-
             </div>
         </article>
     </div>
