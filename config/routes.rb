@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   get '404', to: 'share#not_found'
   get '/create', to: 'share#create', as: 'create_session'
   post 'share/:session', to: 'share#share'
+  post '/killall', to: 'share#kill_containers'
   get ':session', to: 'share#shared', as: 'run_instance'
 end
