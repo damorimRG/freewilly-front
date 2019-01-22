@@ -69,7 +69,7 @@ class ShareController < ApplicationController
                 ssh.loop
             end
         end
-
+        Visit.create(url: params[:session], session: pwdSession)
         redirect_to "http://#{ENDPOINT}/p/#{pwdSession}"
     end
 
